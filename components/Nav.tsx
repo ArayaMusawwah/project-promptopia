@@ -2,22 +2,22 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { signOut, getProviders, signIn } from 'next-auth/react'
+import { signOut, getProviders, signIn, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
-/* TODO: FIX TYPE OF ANYs */
+/* ==TODO== TypeLacks: FIX TYPE OF ANYs */
 
 const Nav = () => {
-  const isUserLoggedIn = true
+  const { data: session } = useSession()
   const [providers, setProviders] = useState<any>(null)
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
 
   useEffect(() => {
-    const setProvider = async () => {
+    const setupProviders = async () => {
       const res = await getProviders()
       setProviders(res)
     }
-    setProvider()
+    setupProviders()
   }, [])
 
   return (
@@ -34,7 +34,7 @@ const Nav = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden sm:flex">
-        {isUserLoggedIn ? (
+        {session ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Post
@@ -46,8 +46,18 @@ const Nav = () => {
             >
               Sign out
             </button>
+            <Link href="/profile">
+              <Image
+                src={session?.user?.image || ''}
+                width={37}
+                height={37}
+                className="rounded-full"
+                alt="Profile"
+              />
+            </Link>
           </div>
         ) : (
+          /* ==TODO== FIX BUG: TIDAK MUNCUL PAS PERTAMA KALI LOAD JALANIN SERVER */
           providers &&
           Object.values(providers).map((provider: any) => (
             <button
@@ -64,14 +74,14 @@ const Nav = () => {
 
       {/* Mobile Navigation */}
       <div className="relative flex sm:hidden">
-        {isUserLoggedIn ? (
+        {session ? (
           <div className="flex">
             <Image
-              src={'/assets/images/logo.svg'}
-              width={36}
-              height={36}
+              src={session?.user?.image || ''}
+              width={40}
+              height={40}
               alt="User Profile Picture"
-              className="object-contain"
+              className="cursor-pointer rounded-full object-contain"
               onClick={() => setToggleDropdown((prev) => !prev)}
             />
             {toggleDropdown && (

@@ -1,7 +1,9 @@
 import User from '@/models/user'
+import { IProfile } from '@/types/GeneralTypes'
 import { connectToDB } from '@/utils/database'
-import NextAuth, { SessionOptions, Profile, Session } from 'next-auth'
+import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -10,44 +12,47 @@ const handler = NextAuth({
     }),
   ],
 
-  /* TODO: FIX TYPE OF ANY */
-  //@ts-ignore
-  async session({ session }: { session: Session }) {
-    const userSession = await User.findOne({
-      email: session?.user?.email,
-    })
-
-    const updatedSession = {
-      ...session,
-      user: {
-        ...session.user,
-        id: userSession._id.toString(),
-      },
-    }
-
-    return updatedSession
-  },
-
-  async signIn({ profile }: { profile: Profile }): Promise<boolean> {
-    try {
-      await connectToDB()
-      const existingUser = await User.findOne({
-        email: profile.email,
+  /* ==TODO== TypeError: FIX TYPE OF ANY */
+  callbacks: {
+    //@ts-ignore
+    async session({ session }: { session: Session }) {
+      const userSession = await User.findOne({
+        email: session?.user?.email,
       })
 
-      if (!existingUser) {
-        await User.create({
-          email: profile.email,
-          username: profile?.name?.trim().toLowerCase(),
-          image: profile.image?.toString(),
-        })
+      const updatedSession = {
+        ...session,
+        user: {
+          ...session.user,
+          id: userSession._id.toString(),
+        },
       }
 
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
+      return updatedSession
+    },
+
+    //@ts-ignore
+    async signIn({ profile }: { profile: IProfile }) {
+      try {
+        await connectToDB()
+        const existingUser = await User.findOne({
+          email: profile?.email,
+        })
+
+        if (!existingUser) {
+          await User.create({
+            email: profile?.email,
+            username: profile?.name?.toLowerCase().replaceAll(' ', ''),
+            image: profile?.picture?.toString(),
+          })
+        }
+
+        return true
+      } catch (error) {
+        console.log(error)
+        return false
+      }
+    },
   },
 })
 
