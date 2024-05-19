@@ -1,7 +1,6 @@
 import { connectToDB } from '@/utils/database'
 import Prompt from '@/models/prompt'
-import { NextRequest } from 'next/server'
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     await connectToDB()
     const prompts = await Prompt.find({}).populate('author')

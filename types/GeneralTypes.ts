@@ -6,7 +6,7 @@ export interface IProfile {
 }
 
 export interface IPost {
-  author: {
+  author?: {
     _id: string
     username: string
     image: string

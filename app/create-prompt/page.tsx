@@ -4,18 +4,8 @@ import Form from '@/components/Form'
 import { useSession } from 'next-auth/react'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Session } from 'next-auth'
 
-export type MySession = Session & {
-  user: {
-    id: string
-    name?: string | null
-    email?: string | null
-    image?: string | null
-  }
-}
-
-const CreatePrompt = () => {
+const CreatePromptPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [post, setPost] = useState({
     prompt: '',
@@ -24,9 +14,7 @@ const CreatePrompt = () => {
 
   // ==TODO== TypeError: FIX session type
 
-  /* @ts-ignore */
-  const { data: session }: { data: MySession } = useSession()
-
+  const { data: session } = useSession()
   const router = useRouter()
 
   const createPrompt = async (e: FormEvent) => {
@@ -59,4 +47,4 @@ const CreatePrompt = () => {
     />
   )
 }
-export default CreatePrompt
+export default CreatePromptPage

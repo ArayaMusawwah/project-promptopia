@@ -2,14 +2,23 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { signOut, getProviders, signIn, useSession } from 'next-auth/react'
+import {
+  signOut,
+  getProviders,
+  signIn,
+  useSession,
+  LiteralUnion,
+  ClientSafeProvider,
+} from 'next-auth/react'
 import { useEffect, useState } from 'react'
-
-/* ==TODO== TypeLacks: FIX TYPE OF ANYs */
+import { BuiltInProviderType } from 'next-auth/providers/index'
 
 const Nav = () => {
   const { data: session } = useSession()
-  const [providers, setProviders] = useState<any>(null)
+  const [providers, setProviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>()
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
 
   useEffect(() => {
@@ -59,7 +68,7 @@ const Nav = () => {
         ) : (
           /* ==TODO== FIX BUG: TIDAK MUNCUL PAS PERTAMA KALI LOAD JALANIN SERVER */
           providers &&
-          Object.values(providers).map((provider: any) => (
+          Object.values(providers).map((provider) => (
             <button
               className="black_btn"
               type="button"
@@ -115,7 +124,7 @@ const Nav = () => {
           </div>
         ) : (
           providers &&
-          Object.values(providers).map((provider: any) => (
+          Object.values(providers).map((provider) => (
             <button
               className="black_btn"
               type="button"

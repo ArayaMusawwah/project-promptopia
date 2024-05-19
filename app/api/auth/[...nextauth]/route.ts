@@ -12,7 +12,6 @@ const handler = NextAuth({
     }),
   ],
 
-  /* ==TODO== TypeError: FIX TYPE OF ANY */
   callbacks: {
     //@ts-ignore
     async session({ session }: { session: Session }) {

@@ -1,19 +1,23 @@
 'use client'
 import { IPost } from '@/types/GeneralTypes'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 const PromptCard = ({
   post,
   handleTagClick,
   handleEdit,
-  handleDelete,
+  handleDelete
 }: {
   post: IPost
   handleTagClick: (tag: string) => void
   handleDelete?: () => void
   handleEdit?: () => void
 }) => {
+  const { data: session } = useSession()
+  const pathName = usePathname()
   const [copiedText, setCopiedText] = useState<string>()
 
   const handleCopy = () => {
@@ -27,18 +31,18 @@ const PromptCard = ({
       <div className="flex items-start justify-between gap-5">
         <div className="flex flex-1 cursor-pointer items-center justify-start gap-3">
           <Image
-            src={post.author.image}
-            alt="user_image"
+            src={post.author?.image || ''}
+            alt="user-image"
             className="rounded-full object-contain"
             width={40}
             height={40}
           />
           <div className="flex flex-col">
             <h3 className="truncate font-satoshi font-semibold text-gray-900">
-              {post.author.username}
+              {post.author?.username}
             </h3>
             <p className="font-inter text-sm text-gray-500">
-              {post.author.email}
+              {post.author?.email}
             </p>
           </div>
         </div>
@@ -65,6 +69,23 @@ const PromptCard = ({
       >
         {post.tag}
       </p>
+
+      {session?.user.id === post.author?._id && pathName === '/profile' && (
+        <div className="flex-center mt-5 gap-4 border-t border-gray-100 pt-3">
+          <p
+            className="green_gradient cursor-pointer font-inter text-sm"
+            onClick={handleEdit}
+          >
+            Edit
+          </p>
+          <p
+            className="red_gradient cursor-pointer font-inter text-sm"
+            onClick={handleDelete}
+          >
+            Delete
+          </p>
+        </div>
+      )}
     </div>
   )
 }

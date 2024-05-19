@@ -1,7 +1,7 @@
 import Feed from '@/components/Feed'
 import React from 'react'
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   return (
     <>
       <section className="w-full flex-col text-center">
@@ -20,4 +20,4 @@ const Home: React.FC = () => {
   )
 }
 
-export default Home
+export default HomePage

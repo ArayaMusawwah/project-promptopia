@@ -10,14 +10,14 @@ const Feed = () => {
     data,
     handleTagClick,
   }: {
-    data: any
+    data: IPost[]
     handleTagClick: () => void
   }) => {
     return (
       <div className="prompt_layout mt-16">
-        {data.map((post: any) => (
+        {data.map((post: IPost) => (
           <PromptCard
-            key={post._id}
+            key={post.author?._id}
             post={post}
             handleTagClick={handleTagClick}
           />
@@ -32,13 +32,11 @@ const Feed = () => {
     const fetchPost = async () => {
       const res = await fetch('/api/prompt')
       const data = await res.json()
-      console.log('fetchPost ~ data =>', data)
-
       setPosts(data)
     }
-
     fetchPost()
   }, [])
+
   return (
     <section className="feed">
       <div className="flex-center relative w-full">

@@ -16,7 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Provider session={''}>
+        {/* @ts-ignore */}
+        <Provider>
           <div className="main">
             <div className="gradient" />
           </div>

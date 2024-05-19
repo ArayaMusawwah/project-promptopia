@@ -17,6 +17,15 @@ const nextConfig = {
     }
     return config
   },
+
+  async rewrites() {
+    return [
+      {
+        source: '/api/authors/:id/posts',
+        destination: '/api/authors/[id]/posts',
+      },
+    ]
+  },
 }
 
 export default nextConfig

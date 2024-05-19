@@ -1,12 +1,18 @@
+import { IPost } from '@/types/GeneralTypes'
 import Link from 'next/link'
 import React from 'react'
 
 type Props = {
   type: string
-  post: any
-  setPost: any
+  post: IPost
+  setPost: React.Dispatch<
+    React.SetStateAction<{
+      prompt: string
+      tag: string
+    }>
+  >
   isSubmitted: boolean
-  handleSubmit: any
+  handleSubmit: (e: React.FormEvent) => Promise<void>
 }
 const Form: React.FC<Props> = ({
   type,
