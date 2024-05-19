@@ -1,7 +1,7 @@
 import User from '@/models/user'
 import { IProfile } from '@/types/GeneralTypes'
 import { connectToDB } from '@/utils/database'
-import NextAuth from 'next-auth'
+import NextAuth, { Session } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
 const handler = NextAuth({
