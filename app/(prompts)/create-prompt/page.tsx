@@ -9,10 +9,8 @@ const CreatePromptPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [post, setPost] = useState({
     prompt: '',
-    tag: '',
+    tag: ''
   })
-
-  // ==TODO== TypeError: FIX session type
 
   const { data: session } = useSession()
   const router = useRouter()
@@ -27,14 +25,16 @@ const CreatePromptPage = () => {
         body: JSON.stringify({
           prompt: post.prompt,
           userId: (session?.user && session?.user.id) || null,
-          tag: post.tag,
-        }),
+          tag: post.tag
+        })
       })
 
       if (!res.ok) return
       router.push('/')
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsSubmitted(false)
     }
   }
   return (

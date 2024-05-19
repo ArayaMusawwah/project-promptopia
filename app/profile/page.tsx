@@ -1,12 +1,16 @@
 'use client'
 
 import Profile from '@/components/Profile'
+import { IPost } from '@/types/GeneralTypes'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const ProfilePage = () => {
   const { data: session } = useSession()
-  const [posts, setPosts] = useState()
+  const [posts, setPosts] = useState<IPost[]>()
+
+  const router = useRouter()
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -18,8 +22,25 @@ const ProfilePage = () => {
     if (session?.user?.id) fetchPost()
   }, [session?.user.id])
 
-  const handleDelete = () => {}
-  const handleEdit = () => {}
+  const handleDelete = async (post: IPost) => {
+    const hasConfirmed = confirm('Are you sure want to delete this prompt?')
+
+    if (hasConfirmed) {
+      try {
+        await fetch(`/api/prompt/${post?._id?.toString()}`, {
+          method: 'DELETE'
+        })
+
+        const filteredPost = posts?.filter((p) => p._id !== post._id)
+        setPosts(filteredPost)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+  const handleEdit = (post: IPost) => {
+    router.push('/update-prompt?id=' + post._id)
+  }
 
   return (
     <section>

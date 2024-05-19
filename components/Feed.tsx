@@ -8,7 +8,7 @@ const Feed = () => {
 
   const PromptCardList = ({
     data,
-    handleTagClick,
+    handleTagClick
   }: {
     data: IPost[]
     handleTagClick: () => void
@@ -17,7 +17,7 @@ const Feed = () => {
       <div className="prompt_layout mt-16">
         {data.map((post: IPost) => (
           <PromptCard
-            key={post.author?._id}
+            key={post._id}
             post={post}
             handleTagClick={handleTagClick}
           />
@@ -26,7 +26,7 @@ const Feed = () => {
     )
   }
 
-  const handleSearchText = (e: InputEvent) => {}
+  const handleSearchText = () => {}
 
   useEffect(() => {
     const fetchPost = async () => {

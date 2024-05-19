@@ -1,20 +1,18 @@
 import { IPost } from '@/types/GeneralTypes'
 import PromptCard from './PromptCard'
 
-interface Props {
+const Profile = ({
+  name,
+  description,
+  data,
+  handleDelete,
+  handleEdit
+}: {
   name: string
   description: string
   data: IPost[] | undefined
   handleDelete: (post: IPost) => void
   handleEdit: (post: IPost) => void
-}
-
-const Profile: React.FC<Props> = ({
-  name,
-  description,
-  data,
-  handleDelete,
-  handleEdit,
 }) => {
   return (
     <div className="w-full">
@@ -25,7 +23,7 @@ const Profile: React.FC<Props> = ({
       <div className="prompt_layout mt-10">
         {data?.map((post: IPost) => (
           <PromptCard
-            key={post.author?._id}
+            key={post._id}
             post={post}
             handleTagClick={() => {}}
             handleDelete={() => handleDelete(post)}
