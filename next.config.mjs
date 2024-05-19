@@ -1,19 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    missingSuspenseWithCSRBailout: false
+  },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
         port: '',
-        pathname: '/**',
-      },
-    ],
+        pathname: '/**'
+      }
+    ]
   },
   webpack(config) {
     config.experiments = {
       ...config.experiments,
-      topLevelAwait: true,
+      topLevelAwait: true
     }
     return config
   },
@@ -22,10 +25,10 @@ const nextConfig = {
     return [
       {
         source: '/api/authors/:id/posts',
-        destination: '/api/authors/[id]/posts',
-      },
+        destination: '/api/authors/[id]/posts'
+      }
     ]
-  },
+  }
 }
 
 export default nextConfig

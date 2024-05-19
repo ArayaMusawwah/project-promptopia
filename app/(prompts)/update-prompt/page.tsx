@@ -1,9 +1,10 @@
 'use client'
 
 import Form from '@/components/Form'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { IPost } from '@/types/GeneralTypes'
+import { SUBRESOURCE_INTEGRITY_MANIFEST } from 'next/dist/shared/lib/constants'
 
 const UpdatePromptPage = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
@@ -12,8 +13,9 @@ const UpdatePromptPage = () => {
     tag: ''
   })
 
-  const promptId = useSearchParams().get('id')
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const promptId = searchParams.get('id')
 
   useEffect(() => {
     fetch(`/api/prompt/${promptId}`)
