@@ -82,22 +82,23 @@ const PromptCard = ({
         {post.tag}
       </p>
 
-      {session?.user.id === post.author?._id && (
-        <div className="flex-center mt-5 gap-4 border-t border-gray-100 pt-3">
-          <p
-            className="green_gradient cursor-pointer font-inter text-sm"
-            onClick={handleEdit}
-          >
-            Edit
-          </p>
-          <p
-            className="red_gradient cursor-pointer font-inter text-sm"
-            onClick={handleDelete}
-          >
-            Delete
-          </p>
-        </div>
-      )}
+      {session?.user.id === post.author?._id &&
+        pathName.includes('/profile/') && (
+          <div className="flex-center mt-5 gap-4 border-t border-gray-100 pt-3">
+            <p
+              className="green_gradient cursor-pointer font-inter text-sm"
+              onClick={handleEdit}
+            >
+              Edit
+            </p>
+            <p
+              className="red_gradient cursor-pointer font-inter text-sm"
+              onClick={handleDelete}
+            >
+              Delete
+            </p>
+          </div>
+        )}
     </div>
   )
 }
