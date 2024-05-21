@@ -8,7 +8,7 @@ import {
   signIn,
   useSession,
   LiteralUnion,
-  ClientSafeProvider,
+  ClientSafeProvider
 } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { BuiltInProviderType } from 'next-auth/providers/index'
@@ -55,7 +55,10 @@ const Nav = () => {
             >
               Sign out
             </button>
-            <Link href="/profile">
+            <Link
+              href={`/profile/${session?.user?.id}`}
+              className="flex-center"
+            >
               <Image
                 src={session?.user?.image || ''}
                 width={37}

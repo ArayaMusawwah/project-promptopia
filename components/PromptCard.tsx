@@ -1,8 +1,9 @@
 'use client'
+
 import { IPost } from '@/types/GeneralTypes'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const PromptCard = ({
@@ -18,7 +19,15 @@ const PromptCard = ({
 }) => {
   const { data: session } = useSession()
   const pathName = usePathname()
+  const router = useRouter()
   const [copiedText, setCopiedText] = useState<string>()
+
+  const handleProfileClick = () => {
+    if (post.author?._id === session?.user?.id)
+      router.push(`/profile/${session?.user?.id}`)
+    else
+      router.push(`/profile/${post.author?._id}?name=${post.author?.username}`)
+  }
 
   const handleCopy = () => {
     setCopiedText(post.prompt)
@@ -29,7 +38,10 @@ const PromptCard = ({
   return (
     <div className="prompt_card">
       <div className="flex items-start justify-between gap-5">
-        <div className="flex flex-1 cursor-pointer items-center justify-start gap-3">
+        <div
+          className="group flex flex-1 cursor-pointer items-center justify-start gap-3"
+          onClick={handleProfileClick}
+        >
           <Image
             src={post.author?.image || ''}
             alt="user-image"
@@ -38,7 +50,7 @@ const PromptCard = ({
             height={40}
           />
           <div className="flex flex-col">
-            <h3 className="truncate font-satoshi font-semibold text-gray-900">
+            <h3 className="truncate font-satoshi font-semibold text-gray-900 group-hover:text-primary-orange">
               {post.author?.username}
             </h3>
             <p className="font-inter text-sm text-gray-500">
@@ -89,4 +101,25 @@ const PromptCard = ({
     </div>
   )
 }
+
+export const PromptCardList = ({
+  data,
+  handleTagClick
+}: {
+  data: IPost[]
+  handleTagClick: (tag: string) => void
+}) => {
+  return (
+    <div className="prompt_layout mt-16">
+      {data.map((post: IPost) => (
+        <PromptCard
+          key={post._id}
+          post={post}
+          handleTagClick={handleTagClick}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default PromptCard

@@ -1,5 +1,4 @@
 import User from '@/models/user'
-import { IProfile } from '@/types/GeneralTypes'
 import { connectToDB } from '@/utils/database'
 import NextAuth, { Session } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
@@ -8,41 +7,39 @@ const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
+    })
   ],
 
   callbacks: {
-    //@ts-ignore
     async session({ session }: { session: Session }) {
       const userSession = await User.findOne({
-        email: session?.user?.email,
+        email: session?.user?.email
       })
 
       const updatedSession = {
         ...session,
         user: {
           ...session.user,
-          id: userSession._id.toString(),
-        },
+          id: userSession._id.toString()
+        }
       }
 
       return updatedSession
     },
 
-    //@ts-ignore
-    async signIn({ profile }: { profile: IProfile }) {
+    async signIn({ profile }) {
       try {
         await connectToDB()
         const existingUser = await User.findOne({
-          email: profile?.email,
+          email: profile?.email
         })
 
         if (!existingUser) {
           await User.create({
             email: profile?.email,
             username: profile?.name?.toLowerCase().replaceAll(' ', ''),
-            image: profile?.picture?.toString(),
+            image: profile?.image?.toString()
           })
         }
 
@@ -51,8 +48,8 @@ const handler = NextAuth({
         console.log(error)
         return false
       }
-    },
-  },
+    }
+  }
 })
 
 export { handler as GET, handler as POST }

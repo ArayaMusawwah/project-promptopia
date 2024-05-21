@@ -1,8 +1,8 @@
 import { connectToDB } from '@/utils/database'
 import Prompt from '@/models/prompt'
 export const GET = async (
-  req: Request,
-  { params }: { params: { id: string } },
+  _req: Request,
+  { params }: { params: { id: string } }
 ) => {
   try {
     await connectToDB()
@@ -11,7 +11,7 @@ export const GET = async (
     return new Response(JSON.stringify(prompts), { status: 200 })
   } catch (error) {
     return new Response(JSON.stringify(`Failed to fetch prompts => ${error}`), {
-      status: 500,
+      status: 500
     })
   }
 }

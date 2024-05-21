@@ -5,18 +5,17 @@ import Provider from '@/components/Provider'
 
 export const metadata: Metadata = {
   title: 'Promptopia',
-  description: 'Discover & Share AI Prompts',
+  description: 'Discover & Share AI Prompts'
 }
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body>
-        {/* @ts-ignore */}
         <Provider>
           <div className="main">
             <div className="gradient" />

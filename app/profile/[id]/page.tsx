@@ -2,25 +2,27 @@
 
 import Profile from '@/components/Profile'
 import { IPost } from '@/types/GeneralTypes'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-const ProfilePage = () => {
-  const { data: session } = useSession()
+const ProfilePage = ({ params }: { params: { id: string } }) => {
   const [posts, setPosts] = useState<IPost[]>()
 
   const router = useRouter()
 
+  const searchParams = useSearchParams()
+  const username = searchParams.get('name')
+  console.log('ProfilePage ~ username =>', username)
+
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await fetch(`/api/authors/${session?.user.id}`)
+      const res = await fetch(`/api/authors/${params.id}`)
       const data = await res.json()
       setPosts(data)
     }
 
-    if (session?.user?.id) fetchPost()
-  }, [session?.user.id])
+    if (params.id) fetchPost()
+  }, [params.id])
 
   const handleDelete = async (post: IPost) => {
     const hasConfirmed = confirm('Are you sure want to delete this prompt?')
@@ -45,7 +47,7 @@ const ProfilePage = () => {
   return (
     <section>
       <Profile
-        name="My"
+        name={username || 'My'}
         description="Welcome to your personalized profile page"
         data={posts}
         handleDelete={handleDelete}

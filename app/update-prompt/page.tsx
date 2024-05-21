@@ -4,9 +4,8 @@ import Form from '@/components/Form'
 import { FormEvent, Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { IPost } from '@/types/GeneralTypes'
-import { SUBRESOURCE_INTEGRITY_MANIFEST } from 'next/dist/shared/lib/constants'
 
-const UpdatePromptPage = () => {
+const ReturnerForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [post, setPost] = useState<IPost>({
     prompt: '',
@@ -18,21 +17,23 @@ const UpdatePromptPage = () => {
   const promptId = searchParams.get('id')
 
   useEffect(() => {
-    fetch(`/api/prompt/${promptId}`)
-      .then((res) => res.json())
-      .then((data) =>
-        setPost({
-          prompt: data.prompt,
-          tag: data.tag
-        })
-      )
+    const fetchPost = async () => {
+      const res = await fetch(`/api/prompt/${promptId}`)
+      const data = await res.json()
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag
+      })
+    }
+
+    fetchPost()
   }, [promptId])
 
   const updatePrompt = async (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitted(true)
 
-    if (!promptId) return alert('Invalid Prompt ID')
+    if (!promptId) return
 
     try {
       const res = await fetch(`/api/prompt/${promptId}`, {
@@ -51,6 +52,7 @@ const UpdatePromptPage = () => {
       setIsSubmitted(false)
     }
   }
+
   return (
     <Form
       type="Edit"
@@ -61,4 +63,13 @@ const UpdatePromptPage = () => {
     />
   )
 }
+
+const UpdatePromptPage = () => {
+  return (
+    <Suspense>
+      <ReturnerForm />
+    </Suspense>
+  )
+}
+
 export default UpdatePromptPage

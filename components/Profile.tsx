@@ -17,7 +17,9 @@ const Profile = ({
   return (
     <div className="w-full">
       <h1 className="head_text text-left">
-        <span className="blue_gradient">{name} Profile</span>
+        <span className="blue_gradient">
+          {name === 'My' ? name : `${name}'s`} Profile
+        </span>
       </h1>
       <p className="desc text-left">{description}</p>
       <div className="prompt_layout mt-10">

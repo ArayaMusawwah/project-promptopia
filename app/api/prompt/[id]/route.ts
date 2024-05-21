@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 //Read
 export const GET = async (
-  req: Request,
+  _req: Request,
   { params }: { params: { id: string } }
 ) => {
   try {
@@ -48,7 +48,7 @@ export const PATCH = async (
 
 //Delete
 export const DELETE = async (
-  req: Request,
+  _req: Request,
   { params }: { params: { id: string } }
 ) => {
   try {
